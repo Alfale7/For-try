@@ -115,7 +115,6 @@ html,body{
   text-align:center;
 }
 
-/* زخارف عامة لكل الشهادات المصغرة */
 .cert-preview::before{
   content:"";
   position:absolute;
@@ -306,15 +305,27 @@ html,body{
   margin:0 auto;
 }
 
-/* ─── الشهادة الأساسية والحل الجذري لقفل الأبعاد ─── */
+/* ─── الشهادة الأساسية ─── */
 .cert-paper-wrap{
   margin-bottom:20px;
   overflow-x:auto;
   -webkit-overflow-scrolling:touch;
 }
+
+/* صندوق التصدير السري لضمان جودة الأبعاد القياسية على أي شاشة شريطة السحب الخفي */
+#hidden-render-container {
+  position: absolute;
+  top: -10000px;
+  left: -10000px;
+  width: 840px;
+  height: 594px;
+  overflow: hidden;
+  z-index: -9999;
+}
+
 .cert-paper{
   width:100%;
-  aspect-ratio:1.414 / 1;  /* A4 landscape معيارية */
+  aspect-ratio:1.414 / 1;
   max-width:840px;
   margin:0 auto;
   background:#fdfcf8;
@@ -329,7 +340,7 @@ html,body{
   box-sizing: border-box;
 }
 
-/* بناء الإطارات داخل ديفات حقيقية صلبة بدلاً من Pseudo-elements لمنع التفكك */
+/* الإطارات الحقيقية المستقلة تماماً */
 .cert-border-outer {
   position: absolute;
   top: 14px; left: 14px; right: 14px; bottom: 14px;
@@ -349,7 +360,6 @@ html,body{
   z-index: 1;
 }
 
-/* زوايا زخرفية */
 .cert-corner{
   position:absolute;
   width:50px;
@@ -363,7 +373,6 @@ html,body{
 .cert-corner.br{bottom:8px; left:8px;}
 .cert-corner svg{width:100%; height:100%;}
 
-/* الهيدر الداخلي للشهادة */
 .cert-head{
   text-align:center;
   margin-bottom:8px;
@@ -429,7 +438,6 @@ html,body{
   text-transform:uppercase;
 }
 
-/* جسم الشهادة */
 .cert-body{
   text-align:center;
   flex:1;
@@ -501,7 +509,6 @@ html,body{
   font-style:italic;
 }
 
-/* ذيل الشهادة - التوقيعات والتاريخ */
 .cert-footer{
   display:flex;
   justify-content:space-between;
@@ -572,7 +579,7 @@ html,body{
   margin-top:1px;
 }
 
-/* ─── ثيمات الشهادة (الألوان) ─── */
+/* ─── ثيمات الشهادة ─── */
 .cp-theme-teal{color:#1a3c4e;}
 .cp-theme-teal .cert-paper{background:linear-gradient(135deg, #fdfcf8 0%, #f0e6c4 100%);}
 .cp-theme-teal .cert-seal-wrap{background:#1a3c4e;}
@@ -630,7 +637,6 @@ html,body{
   border-radius:2px;
 }
 
-/* ثيمات الألوان */
 .themes-row{
   display:flex;
   flex-wrap:wrap;
@@ -666,7 +672,6 @@ html,body{
   box-shadow:0 1px 3px rgba(0,0,0,0.2);
 }
 
-/* صف الحقول السريعة */
 .quick-fields{
   display:grid;
   grid-template-columns:1fr 1fr;
@@ -701,7 +706,6 @@ html,body{
   background:#fff;
 }
 
-/* قسم النسخ المتعددة */
 .bulk-section{
   background:linear-gradient(135deg, rgba(201,164,91,0.06), rgba(26,60,78,0.04));
   border-radius:12px;
@@ -739,7 +743,6 @@ html,body{
   font-weight:700;
 }
 
-/* أزرار الأكشن */
 .editor-actions{
   display:flex;
   gap:10px;
@@ -909,7 +912,6 @@ html,body{
   .cert-date-icon{font-size:0.85rem;}
   .cert-footer{padding:0 4px; gap:4px;}
 
-  /* الحفاظ على ثبات الإطارات الحقيقية على شاشات المحمول */
   .cert-border-outer { top: 6px; left: 6px; right: 6px; bottom: 6px; }
   .cert-border-inner { top: 10px; left: 10px; right: 10px; bottom: 10px; }
 
@@ -958,6 +960,8 @@ html,body{
 
 <div id="toast"></div>
 
+<div id="hidden-render-container"></div>
+
 <div id="progress-overlay">
   <div class="progress-box">
     <div class="ico">⏳</div>
@@ -970,20 +974,15 @@ html,body{
 </div>
 
 <div class="app" id="gallery-view">
-
   <div class="page-header">
     <div class="crown-icon">🏆</div>
     <h1>شهادات الشكر والتقدير</h1>
     <p>اختر نوع الشهادة المناسبة لتحريرها وطباعتها</p>
   </div>
-
-  <div class="gallery" id="gallery-grid">
-    </div>
-
+  <div class="gallery" id="gallery-grid"></div>
 </div>
 
 <div class="editor-view" id="editor-view">
-
   <div class="editor-header">
     <button class="btn-back" onclick="backToGallery()">
       <span>›</span><span>رجوع</span>
@@ -993,7 +992,6 @@ html,body{
   </div>
 
   <div class="editor-body">
-
     <div class="cert-paper-wrap">
       <div class="cert-paper" id="cert-paper">
         <div class="cert-border-outer"></div>
@@ -1005,9 +1003,7 @@ html,body{
         <div class="cert-corner br"><svg viewBox="0 0 50 50"><path d="M45 45 L25 45 M45 45 L45 25 M45 45 Q35 45 35 35 Q35 25 25 25 M35 35 L25 35" stroke="currentColor" stroke-width="1.5" fill="none" opacity="0.6"/></svg></div>
 
         <div class="cert-head">
-          <div class="cert-seal-wrap">
-            <div class="cert-seal-icon" id="cert-seal">🏆</div>
-          </div>
+          <div class="cert-seal-wrap"><div class="cert-seal-icon" id="cert-seal">🏆</div></div>
           <div class="cert-org" id="cert-org">المملكة العربية السعودية · وزارة التعليم</div>
           <h2 class="cert-title" id="cert-title">شهادة شكر</h2>
           <div class="cert-subtitle" id="cert-subtitle">CERTIFICATE OF APPRECIATION</div>
@@ -1042,34 +1038,13 @@ html,body{
     <div class="controls">
       <h3>🎨 الألوان والثيم</h3>
       <div class="themes-row" id="themes-row">
-        <button class="theme-pill active" data-theme="teal">
-          <span class="swatch" style="background:#1a3c4e"></span>
-          <span>كلاسيكي</span>
-        </button>
-        <button class="theme-pill" data-theme="gold">
-          <span class="swatch" style="background:linear-gradient(135deg,#c9a45b,#8b6428)"></span>
-          <span>ذهبي</span>
-        </button>
-        <button class="theme-pill" data-theme="green">
-          <span class="swatch" style="background:#1a4d2e"></span>
-          <span>أخضر</span>
-        </button>
-        <button class="theme-pill" data-theme="purple">
-          <span class="swatch" style="background:#4a1a4d"></span>
-          <span>بنفسجي</span>
-        </button>
-        <button class="theme-pill" data-theme="blue">
-          <span class="swatch" style="background:#1a2a4d"></span>
-          <span>أزرق</span>
-        </button>
-        <button class="theme-pill" data-theme="red">
-          <span class="swatch" style="background:#5d1a1a"></span>
-          <span>أحمر</span>
-        </button>
-        <button class="theme-pill" data-theme="ocean">
-          <span class="swatch" style="background:#0d4d5d"></span>
-          <span>محيطي</span>
-        </button>
+        <button class="theme-pill active" data-theme="teal"><span class="swatch" style="background:#1a3c4e"></span><span>كلاسيكي</span></button>
+        <button class="theme-pill" data-theme="gold"><span class="swatch" style="background:linear-gradient(135deg,#c9a45b,#8b6428)"></span><span>ذهبي</span></button>
+        <button class="theme-pill" data-theme="green"><span class="swatch" style="background:#1a4d2e"></span><span>أخضر</span></button>
+        <button class="theme-pill" data-theme="purple"><span class="swatch" style="background:#4a1a4d"></span><span>بنفسجي</span></button>
+        <button class="theme-pill" data-theme="blue"><span class="swatch" style="background:#1a2a4d"></span><span>أزرق</span></button>
+        <button class="theme-pill" data-theme="red"><span class="swatch" style="background:#5d1a1a"></span><span>أحمر</span></button>
+        <button class="theme-pill" data-theme="ocean"><span class="swatch" style="background:#0d4d5d"></span><span>محيطي</span></button>
       </div>
     </div>
 
@@ -1086,52 +1061,28 @@ html,body{
     <div class="controls">
       <h3>✍️ التعبئة السريعة</h3>
       <div class="quick-fields">
-        <div class="quick-field">
-          <label>الاسم</label>
-          <input type="text" id="q-name" placeholder="اكتب الاسم">
-        </div>
-        <div class="quick-field">
-          <label>سبب التكريم</label>
-          <input type="text" id="q-reason" placeholder="اكتب السبب">
-        </div>
-        <div class="quick-field">
-          <label>التاريخ</label>
-          <input type="text" id="q-date" placeholder="١٤٤٧/٣/١١">
-        </div>
-        <div class="quick-field">
-          <label>قائد/ة المدرسة</label>
-          <input type="text" id="q-principal" placeholder="اسم القائد/ة">
-        </div>
-        <div class="quick-field">
-          <label>ختم المدرسة (نصي)</label>
-          <input type="text" id="q-seal-text" placeholder="ختم المدرسة">
-        </div>
+        <div class="quick-field"><label>الاسم</label><input type="text" id="q-name" placeholder="اكتب الاسم"></div>
+        <div class="quick-field"><label>سبب التكريم</label><input type="text" id="q-reason" placeholder="اكتب السبب"></div>
+        <div class="quick-field"><label>التاريخ</label><input type="text" id="q-date" placeholder="١٤٤٧/٣/١١"></div>
+        <div class="quick-field"><label>قائد/ة المدرسة</label><input type="text" id="q-principal" placeholder="اسم القائد/ة"></div>
+        <div class="quick-field"><label>ختم المدرسة (نصي)</label><input type="text" id="q-seal-text" placeholder="ختم المدرسة"></div>
       </div>
     </div>
 
     <div class="controls">
       <h3>📋 طباعة عدة شهادات (للأسماء المتعددة)</h3>
       <div class="bulk-section">
-        <div class="hint">
-          💡 اكتب أسماء عدة أشخاص — كل اسم في سطر منفصل — ستحصل على شهادة لكل واحد منهم كصور PNG عالية الجودة داخل ملف <strong>ZIP</strong> واحد.
-        </div>
+        <div class="hint">💡 اكتب أسماء عدة أشخاص — كل اسم في سطر منفصل — ستحصل على شهادة لكل واحد منهم كصور PNG عالية الجودة داخل ملف <strong>ZIP</strong> واحد.</div>
         <textarea id="bulk-names" placeholder="مثال:&#10;الأستاذ محمد العتيبي&#10;الأستاذة فاطمة الزهراني&#10;الأستاذ خالد القحطاني"></textarea>
         <div class="bulk-count" id="bulk-count">عدد الأسماء: 0</div>
       </div>
     </div>
 
     <div class="editor-actions">
-      <button class="btn btn-ghost" onclick="resetForm()">
-        <span>🔄</span><span>تفريغ</span>
-      </button>
-      <button class="btn btn-secondary" onclick="printSingle()">
-        <span>🖨️</span><span>طباعة الشهادة الحالية</span>
-      </button>
-      <button class="btn btn-primary" onclick="downloadBulk()">
-        <span>📥</span><span>تحميل الكل (ZIP)</span>
-      </button>
+      <button class="btn btn-ghost" onclick="resetForm()"><span>🔄</span><span>تفريغ</span></button>
+      <button class="btn btn-secondary" onclick="printSingle()"><span>🖨️</span><span>طباعة الشهادة الحالية</span></button>
+      <button class="btn btn-primary" onclick="downloadBulk()"><span>📥</span><span>تحميل الكل (ZIP)</span></button>
     </div>
-
   </div>
 </div>
 
@@ -1139,105 +1090,19 @@ html,body{
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 
 <script>
-/* ═══════════════════════════════════════════════
-   بيانات الشهادات
-   ═══════════════════════════════════════════════ */
 const CERTIFICATES = [
-  {
-    id:'teacher',
-    title:'شهادة شكر للمعلم/ة',
-    desc:'تكريم للمعلم على عطائه وجهوده',
-    seal:'👨‍🏫',
-    themeClass:'theme-teacher',
-    defaultColor:'teal',
-    titleAr:'شهادة شكر وتقدير',
-    subtitle:'CERTIFICATE OF APPRECIATION',
-    pretext:'تتقدم إدارة المدرسة بأطيب الشكر والتقدير إلى المعلم القدير',
-    reason:'تقديراً لجهوده المتميزة في العملية التعليمية، وعطائه الدؤوب في خدمة الطلاب وتربية الأجيال',
-    sigRole:'قائد/ة المدرسة'
-  },
-  {
-    id:'excellence',
-    title:'شهادة تفوّق دراسي',
-    desc:'للطالب/ة المتفوّق في الدراسة',
-    seal:'🏆',
-    themeClass:'theme-excellence',
-    defaultColor:'gold',
-    titleAr:'شهادة تفوّق',
-    subtitle:'CERTIFICATE OF EXCELLENCE',
-    pretext:'تفتخر إدارة المدرسة بتكريم الطالب/ة المتفوّق/ة',
-    reason:'لتحقيقه/ا أعلى المعدلات الدراسية وتميّزه/ا الأكاديمي خلال الفصل الدراسي',
-    sigRole:'قائد/ة المدرسة'
-  },
-  {
-    id:'behavior',
-    title:'شهادة شكر على السلوك',
-    desc:'تكريم الطالب/ة على حسن السلوك',
-    seal:'⭐',
-    themeClass:'theme-behavior',
-    defaultColor:'green',
-    titleAr:'شهادة شكر وتقدير',
-    subtitle:'CERTIFICATE OF GOOD CONDUCT',
-    pretext:'تتقدم إدارة المدرسة بالشكر والتقدير للطالب/ة',
-    reason:'تقديراً لحسن سلوكه/ا وتعاملاتـ/ها الراقية مع المعلمين والزملاء، والتزامه/ا بقيم المدرسة',
-    sigRole:'قائد/ة المدرسة'
-  },
-  {
-    id:'parent',
-    title:'شهادة شكر لولي الأمر',
-    desc:'تكريم لولي الأمر على متابعته',
-    seal:'🌹',
-    themeClass:'theme-parent',
-    defaultColor:'purple',
-    titleAr:'شهادة شكر وتقدير',
-    subtitle:'CERTIFICATE OF GRATITUDE',
-    pretext:'تتقدم إدارة المدرسة بأسمى آيات الشكر والتقدير إلى ولي الأمر',
-    reason:'تقديراً لمتابعته/ا الحثيثة وحرصه/ا على تربية ابنه/ابنتها، ولدعمه/ا المستمر لإدارة المدرسة',
-    sigRole:'قائد/ة المدرسة'
-  },
-  {
-    id:'staff',
-    title:'شهادة شكر للموظف الإداري',
-    desc:'تكريم الموظف على إنجازاته',
-    seal:'💼',
-    themeClass:'theme-staff',
-    defaultColor:'blue',
-    titleAr:'شهادة شكر وتقدير',
-    subtitle:'CERTIFICATE OF APPRECIATION',
-    pretext:'تتقدم إدارة المدرسة بالشكر والتقدير إلى الموظف/ة',
-    reason:'تقديراً لجهوده/ا المخلصة في خدمة العمل الإداري والمدرسي، والتزامه/ا بأعلى معايير المهنية',
-    sigRole:'قائد/ة المدرسة'
-  },
-  {
-    id:'general',
-    title:'شهادة تقدير عامة',
-    desc:'شهادة مرنة لأي مناسبة',
-    seal:'🎖️',
-    themeClass:'theme-general',
-    defaultColor:'red',
-    titleAr:'شهادة تقدير',
-    subtitle:'CERTIFICATE OF HONOR',
-    pretext:'تتقدم إدارة المدرسة بتقديم هذه الشهادة إلى',
-    reason:'تقديراً لجهوده/ا المميزة وإنجازاته/ا اللافتة',
-    sigRole:'قائد/ة المدرسة'
-  },
-  {
-    id:'participation',
-    title:'شهادة مشاركة في فعالية',
-    desc:'للمشاركين في الفعاليات',
-    seal:'🎯',
-    themeClass:'theme-participation',
-    defaultColor:'ocean',
-    titleAr:'شهادة مشاركة',
-    subtitle:'CERTIFICATE OF PARTICIPATION',
-    pretext:'تشهد إدارة المدرسة بمشاركة',
-    reason:'في فعاليات اليوم الدراسي وأنشطته المختلفة، شاكرين له/ا حضوره/ا الفعّال',
-    sigRole:'قائد/ة المدرسة'
-  }
+  { id:'teacher', title:'شهادة شكر للمعلم/ة', desc:'تكريم للمعلم على عطائه وجهوده', seal:'👨‍🏫', themeClass:'theme-teacher', defaultColor:'teal', titleAr:'شهادة شكر وتقدير', subtitle:'CERTIFICATE OF APPRECIATION', pretext:'تتقدم إدارة المدرسة بأطيب الشكر والتقدير إلى المعلم القدير', reason:'تقديراً لجهوده المتميزة في العملية التعليمية، وعطائه الدؤوب في خدمة الطلاب وتربية الأجيال', sigRole:'قائد/ة المدرسة' },
+  { id:'excellence', title:'شهادة تفوّق دراسي', desc:'للطالب/ة المتفوّق في الدراسة', seal:'🏆', themeClass:'theme-excellence', defaultColor:'gold', titleAr:'شهادة تفوّق', subtitle:'CERTIFICATE OF EXCELLENCE', pretext:'تفتخر إدارة المدرسة بتكريم الطالب/ة المتفوّق/ة', reason:'لتحقيقه/ا أعلى المعدلات الدراسية وتميّزه/ا الأكاديمي خلال الفصل الدراسي', sigRole:'قائد/ة المدرسة' },
+  { id:'behavior', title:'شهادة شكر على السلوك', desc:'تكريم الطالب/ة على حسن السلوك', seal:'⭐', themeClass:'theme-behavior', defaultColor:'green', titleAr:'شهادة شكر وتقدير', subtitle:'CERTIFICATE OF GOOD CONDUCT', pretext:'تتقدم إدارة المدرسة بالشكر والتقدير للطالب/ة', reason:'تقديراً لحسن سلوكه/ا وتعاملاتـ/ها الراقية مع المعلمين والزملاء، والتزامه/ا بقيم المدرسة', sigRole:'قائد/ة المدرسة' },
+  { id:'parent', title:'شهادة شكر لولي الأمر', desc:'تكريم لولي الأمر على متابعته', seal:'🌹', themeClass:'theme-parent', defaultColor:'purple', titleAr:'شهادة شكر وتقدير', subtitle:'CERTIFICATE OF GRATITUDE', pretext:'تتقدم إدارة المدرسة بأسمى آيات الشكر والتقدير إلى ولي الأمر', reason:'تقديراً لمتابعته/ا الحثيثة وحرصه/ا على تربية ابنه/ابنتها، ولدعمه/ا المستمر لإدارة المدرسة', sigRole:'قائد/ة المدرسة' },
+  { id:'staff', title:'شهادة شكر للموظف الإداري', desc:'تكريم الموظف على إنجازاته', seal:'💼', themeClass:'theme-staff', defaultColor:'blue', titleAr:'شهادة شكر وتقدير', subtitle:'CERTIFICATE OF APPRECIATION', pretext:'تتقدم إدارة المدرسة بالشكر والتقدير إلى الموظف/ة', reason:'تقديراً لجهوده/ا المخلصة في خدمة العمل الإداري والمدرسي، والتزامه/ا بأعلى معايير المهنية', sigRole:'قائد/ة المدرسة' },
+  { id:'general', title:'شهادة تقدير عامة', desc:'شهادة مرنة لأي مناسبة', seal:'🎖️', themeClass:'theme-general', defaultColor:'red', titleAr:'شهادة تقدير', subtitle:'CERTIFICATE OF HONOR', pretext:'تتقدم إدارة المدرسة بتقديم هذه الشهادة إلى', reason:'تقديراً لجهوده/ا المميزة وإنجازاته/ا اللافتة', sigRole:'قائد/ة المدرسة' },
+  { id:'participation', title:'شهادة مشاركة في فعالية', desc:'للمشاركين في الفعاليات', seal:'🎯', themeClass:'theme-participation', defaultColor:'ocean', titleAr:'شهادة مشاركة', subtitle:'CERTIFICATE OF PARTICIPATION', pretext:'تشهد إدارة المدرسة بمشاركة', reason:'في فعاليات اليوم الدراسي وأنشطته المختلفة، شاكرين له/ا حضوره/ا الفعّال', sigRole:'قائد/ة المدرسة' }
 ];
 
 let currentCert = null;
 let currentTheme = 'teal';
+let selectedFontFamily = "'Aref Ruqaa', serif";
 
 function buildGallery(){
   const grid = document.getElementById('gallery-grid');
@@ -1251,18 +1116,11 @@ function buildGallery(){
         <div class="seal">${cert.seal}</div>
         <div class="title-mini">${cert.titleAr}</div>
         <div class="for-mini">${cert.subtitle}</div>
-        <div class="lines">
-          <div class="line"></div>
-          <div class="line short"></div>
-          <div class="line"></div>
-        </div>
+        <div class="lines"><div class="line"></div><div class="line short"></div><div class="line"></div></div>
       </div>
       <div class="cert-info">
-        <h3>${cert.title}</h3>
-        <p>${cert.desc}</p>
-        <div class="cert-action">
-          <span>✨</span><span>اختر هذه</span>
-        </div>
+        <h3>${cert.title}</h3><p>${cert.desc}</p>
+        <div class="cert-action"><span>✨</span><span>اختر هذه</span></div>
       </div>
     `;
     grid.appendChild(card);
@@ -1286,8 +1144,8 @@ function openEditor(certId){
   document.getElementById('cert-sig-name-2').textContent = '';
   document.getElementById('cert-sig-role').textContent = cert.sigRole;
 
-  const nameEl = document.getElementById('cert-name');
-  nameEl.style.fontFamily = "'Aref Ruqaa', serif";
+  selectedFontFamily = "'Aref Ruqaa', serif";
+  document.getElementById('cert-name').style.fontFamily = selectedFontFamily;
   document.querySelectorAll('#fonts-row .theme-pill').forEach((btn, idx) => {
     btn.classList.toggle('active', idx === 0);
   });
@@ -1297,12 +1155,10 @@ function openEditor(certId){
   document.getElementById('q-date').value = document.getElementById('cert-date').textContent;
   document.getElementById('q-principal').value = '';
   document.getElementById('q-seal-text').value = '';
-
   document.getElementById('bulk-names').value = '';
   updateBulkCount();
 
   applyTheme(cert.defaultColor);
-
   document.getElementById('gallery-view').style.display = 'none';
   document.getElementById('editor-view').classList.add('active');
   window.scrollTo(0, 0);
@@ -1317,10 +1173,7 @@ function backToGallery(){
 function applyTheme(theme){
   currentTheme = theme;
   const paper = document.getElementById('cert-paper');
-  paper.parentElement.parentElement.className = 'editor-body';
-  paper.className = 'cert-paper';
-  paper.classList.add('cp-theme-' + theme);
-
+  paper.className = 'cert-paper cp-theme-' + theme;
   document.querySelectorAll('#themes-row .theme-pill').forEach(p => {
     p.classList.toggle('active', p.dataset.theme === theme);
   });
@@ -1331,10 +1184,9 @@ document.querySelectorAll('#themes-row .theme-pill').forEach(p => {
 });
 
 function changeFont(fontName, element) {
-  document.getElementById('cert-name').style.fontFamily = `'${fontName}', serif`;
-  document.querySelectorAll('#fonts-row .theme-pill').forEach(btn => {
-    btn.classList.remove('active');
-  });
+  selectedFontFamily = `'${fontName}', serif`;
+  document.getElementById('cert-name').style.fontFamily = selectedFontFamily;
+  document.querySelectorAll('#fonts-row .theme-pill').forEach(btn => btn.classList.remove('active'));
   element.classList.add('active');
   showToast(`✅ تم الاعتماد: ${fontName}`);
 }
@@ -1342,11 +1194,8 @@ function changeFont(fontName, element) {
 function syncField(fieldId, certElId){
   const field = document.getElementById(fieldId);
   const certEl = document.getElementById(certElId);
-  field.addEventListener('input', () => {
-    certEl.textContent = field.value;
-  });
+  field.addEventListener('input', () => { certEl.textContent = field.value; });
 }
-
 syncField('q-name', 'cert-name');
 syncField('q-reason', 'cert-reason');
 syncField('q-date', 'cert-date');
@@ -1356,9 +1205,7 @@ syncField('q-seal-text', 'cert-sig-name-2');
 function reverseSync(certElId, fieldId){
   const certEl = document.getElementById(certElId);
   const field = document.getElementById(fieldId);
-  certEl.addEventListener('input', () => {
-    field.value = certEl.textContent;
-  });
+  certEl.addEventListener('input', () => { field.value = certEl.textContent; });
 }
 reverseSync('cert-name', 'q-name');
 reverseSync('cert-reason', 'q-reason');
@@ -1390,165 +1237,121 @@ function resetForm(){
 
 function printSingle(){
   const name = document.getElementById('cert-name').textContent.trim();
-  if(!name){
-    showToast('❌ يرجى إدخال الاسم أولاً');
-    return;
-  }
+  if(!name){ showToast('❌ يرجى إدخال الاسم أولاً'); return; }
   window.print();
 }
 
+/* ═══════════════════════════════════════════════
+   استراتيجية الحاوية المنفصلة التامة لحل مشكلة الإطار
+   ═══════════════════════════════════════════════ */
 async function downloadBulk(){
   const namesRaw = bulkTextarea.value.trim();
-  let names;
-
-  if(namesRaw){
-    names = namesRaw.split('\n').map(s => s.trim()).filter(s => s.length > 0);
-  } else {
+  let names = namesRaw ? namesRaw.split('\n').map(s => s.trim()).filter(s => s.length > 0) : [];
+  
+  if(names.length === 0){
     const singleName = document.getElementById('cert-name').textContent.trim();
-    if(!singleName){
-      showToast('❌ يرجى إدخال الاسم في الحقل أو قائمة الأسماء');
-      return;
-    }
+    if(!singleName){ showToast('❌ يرجى إدخال الاسم'); return; }
     names = [singleName];
   }
 
-  if(names.length === 0){
-    showToast('❌ لا توجد أسماء للطباعة');
+  if(typeof domtoimage === 'undefined' || (names.length > 1 && typeof JSZip === 'undefined')){
+    showToast('❌ جاري تحميل ملفات النظام، انتظر ثانية واحدة');
     return;
   }
 
-  if(typeof domtoimage === 'undefined'){
-    showToast('❌ المكتبة لم تُحمّل بعد، انتظر ثواني وأعد المحاولة');
-    return;
+  showProgress('📥 جاري تهيئة الحاوية القياسية المانعة للتشويه...', 0, names.length);
+  await new Promise(r => setTimeout(r, 200));
+
+  // 1. استنساخ عنصر الشهادة بالكامل لحمايتها من تأثير شاشة الجوال الحالية
+  const originalPaper = document.getElementById('cert-paper');
+  const clonePaper = originalPaper.cloneNode(true);
+  
+  // 2. تصفية وحظر Contenteditable لضمان النقاء الهيكلي داخل النسخة المخفية
+  clonePaper.removeAttribute('id');
+  clonePaper.querySelectorAll('[contenteditable]').forEach(el => el.removeAttribute('contenteditable'));
+  
+  // 3. تثبيتها في صندوق القياس الذكي للكمبيوتر لمنع التفكك والانكماش
+  clonePaper.style.position = 'absolute';
+  clonePaper.style.width = '840px';
+  clonePaper.style.height = '594px';
+  clonePaper.style.maxWidth = '840px';
+  clonePaper.style.maxHeight = '594px';
+  clonePaper.style.padding = '30px 36px';
+  clonePaper.style.aspectRatio = '1.414 / 1';
+  clonePaper.style.display = 'flex';
+  clonePaper.style.flexDirection = 'column';
+  clonePaper.style.justifyContent = 'between';
+  
+  // إعادة فرض خطوط النص وسبب التكريم بالحجم الفاخر الأصلي داخل الصورة المستخرجة
+  const cloneReason = clonePaper.querySelector('.cert-reason');
+  if(cloneReason) {
+    cloneReason.style.fontSize = '0.95rem';
+    cloneReason.style.lineHeight = '1.7';
+    cloneReason.style.maxWidth = '85%';
   }
-  if(names.length > 1 && typeof JSZip === 'undefined'){
-    showToast('❌ مكتبة ZIP لم تُحمّل بعد، أعد المحاولة');
-    return;
+  const cloneName = clonePaper.querySelector('.cert-name');
+  if(cloneName) {
+    cloneName.style.fontSize = '2rem';
+    cloneName.style.fontFamily = selectedFontFamily;
   }
 
-  showProgress('📥 جاري تحضير الشهادات...', 0, names.length);
-  await new Promise(r => setTimeout(r, 150));
+  const renderContainer = document.getElementById('hidden-render-container');
+  renderContainer.innerHTML = '';
+  renderContainer.appendChild(clonePaper);
 
-  const paper = document.getElementById('cert-paper');
-  const nameEl = document.getElementById('cert-name');
-  const originalName = nameEl.textContent;
-
-  const editables = paper.querySelectorAll('[contenteditable]');
-  editables.forEach(el => el.setAttribute('data-was-editable', 'true'));
-  editables.forEach(el => el.removeAttribute('contenteditable'));
+  // تحديث هدف الكتابة ليكون على الصندوق المثالي المستقر
+  const targetNameEl = clonePaper.querySelector('.cert-name');
 
   try{
     if(names.length === 1){
-      nameEl.textContent = names[0];
-      await new Promise(r => setTimeout(r, 200));
+      targetNameEl.textContent = names[0];
+      await new Promise(r => setTimeout(r, 150));
 
-      const blob = await renderToBlob(paper);
-      if(!blob) throw new Error('Failed to generate image');
+      const blob = await domtoimage.toBlob(clonePaper, { quality: 1.0, bgcolor: '#fdfcf8', width: 840, height: 594, cacheBust: true });
       downloadBlob(blob, `شهادة_${sanitize(names[0])}.png`);
 
       updateProgress(1, 1);
-      hideProgress();
-      showToast('✅ تم تحميل الشهادة');
+      showToast('✅ تم استخراج الشهادة بنجاح تام وبأبعاد معيارية');
     } else {
       const zip = new JSZip();
 
       for(let i = 0; i < names.length; i++){
-        nameEl.textContent = names[i];
-        await new Promise(r => setTimeout(r, 150));
+        showProgress('📥 جاري صياغة ومعالجة الشهادات الرسمية...', i, names.length);
+        targetNameEl.textContent = names[i];
+        await new Promise(r => setTimeout(r, 120));
 
         try{
-          const blob = await renderToBlob(paper);
+          const blob = await domtoimage.toBlob(clonePaper, { quality: 1.0, bgcolor: '#fdfcf8', width: 840, height: 594, cacheBust: true });
           if(blob){
             zip.file(`شهادة_${(i+1).toString().padStart(2,'0')}_${sanitize(names[i])}.png`, blob);
-          } else {
-            console.warn('Failed for name:', names[i]);
           }
-        } catch(e){
-          console.error('Error on', names[i], e);
-        }
-
+        } catch(e){ console.error(e); }
         updateProgress(i + 1, names.length);
       }
 
-      showProgress('📦 جاري ضغط الملفات...', names.length, names.length);
+      showProgress('📦 جاري إتمام وضغط ملف الـ ZIP الموحد...', names.length, names.length);
       const zipBlob = await zip.generateAsync({type:'blob'});
-      downloadBlob(zipBlob, 'الشهادات.zip');
-
-      hideProgress();
-      showToast(`✅ تم تحميل ${names.length} شهادة في ملف ZIP`);
+      downloadBlob(zipBlob, 'مجموعة_الشهادات_الرسمية.zip');
+      showToast(`✅ تم حفظ ${names.length} شهادة دفعة واحدة وبأعلى جودة`);
     }
   } catch(err){
-    console.error('Bulk download error:', err);
-    hideProgress();
-    showToast('❌ خطأ: ' + (err.message || 'فشل التحميل'));
+    console.error(err);
+    showToast('❌ حدث خطأ أثناء التصدير');
   } finally{
-    editables.forEach(el => {
-      if(el.getAttribute('data-was-editable')){
-        el.setAttribute('contenteditable', 'true');
-        el.removeAttribute('data-was-editable');
-      }
-    });
-    nameEl.textContent = originalName;
-  }
-}
-
-/* التحديث الفاصل: فرض مقاسات وتأكيد ثبات ديفات الإطارات حركياً بداخل كود التقاط الصورة */
-async function renderToBlob(element){
-  // تأمين إجبار الإطارات الحقيقية على الالتزام بالمساحة المصدرة 840x594 لحل أزمة التفكك تماماً
-  const outerB = element.querySelector('.cert-border-outer');
-  const innerB = element.querySelector('.cert-border-inner');
-  
-  if(outerB && innerB) {
-    outerB.style.top = "14px"; outerB.style.left = "14px"; outerB.style.right = "14px"; outerB.style.bottom = "14px";
-    innerB.style.top = "22px"; innerB.style.left = "22px"; innerB.style.right = "22px"; innerB.style.bottom = "22px";
-  }
-
-  const options = {
-    quality: 1.0,
-    bgcolor: '#fdfcf8',
-    width: 840,   
-    height: 594,  
-    style: {
-      transform: 'scale(1)',
-      transformOrigin: 'top left',
-      boxSizing: 'border-box',
-      width: '840px',
-      height: '594px',
-      maxWidth: '840px',
-      maxHeight: '594px',
-      padding: '30px 36px',
-      aspectRatio: '1.414 / 1',
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'between',
-      position: 'relative'
-    },
-    cacheBust: true
-  };
-
-  try{
-    const blob = await domtoimage.toBlob(element, options);
-    return blob;
-  } catch(err){
-    console.error('[Cert] domtoimage error:', err);
-    throw err;
+    renderContainer.innerHTML = ''; // تنظيف الصندوق السري فوراً
+    hideProgress();
   }
 }
 
 function downloadBlob(blob, filename){
   const url = URL.createObjectURL(blob);
   const link = document.createElement('a');
-  link.href = url;
-  link.download = filename;
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
+  link.href = url; link.download = filename;
+  document.body.appendChild(link); link.click(); document.body.removeChild(link);
   setTimeout(() => URL.revokeObjectURL(url), 1500);
 }
 
-function sanitize(name){
-  return (name || '').replace(/[\/\\:*?"<>|]/g, '_').substring(0, 80).trim() || 'cert';
-}
+function sanitize(name){ return (name || '').replace(/[\/\\:*?"<>|]/g, '_').substring(0, 60).trim() || 'cert'; }
 
 function showProgress(title, current, total){
   document.getElementById('progress-title').textContent = title;
@@ -1560,13 +1363,9 @@ function updateProgress(current, total){
   document.getElementById('progress-fill').style.width = pct + '%';
   document.getElementById('progress-text').textContent = `${current} من ${total}`;
 }
-function hideProgress(){
-  document.getElementById('progress-overlay').classList.remove('show');
-}
+function hideProgress(){ document.getElementById('progress-overlay').classList.remove('show'); }
 
 buildGallery();
 </script>
-
 </body>
 </html>
-
