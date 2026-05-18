@@ -115,7 +115,7 @@ html,body{
   text-align:center;
 }
 
-/* زخارف عامة لكل الشهادات */
+/* زخارف عامة لكل الشهادات المصغرة */
 .cert-preview::before{
   content:"";
   position:absolute;
@@ -306,7 +306,7 @@ html,body{
   margin:0 auto;
 }
 
-/* ─── الشهادة (مكان العرض الفعلي) ─── */
+/* ─── الشهادة الأساسية والحل الجذري لقفل الأبعاد ─── */
 .cert-paper-wrap{
   margin-bottom:20px;
   overflow-x:auto;
@@ -314,7 +314,7 @@ html,body{
 }
 .cert-paper{
   width:100%;
-  aspect-ratio:1.414 / 1;  /* A4 landscape */
+  aspect-ratio:1.414 / 1;  /* A4 landscape معيارية */
   max-width:840px;
   margin:0 auto;
   background:#fdfcf8;
@@ -329,24 +329,24 @@ html,body{
   box-sizing: border-box;
 }
 
-/* الإطار الزخرفي الخارجي */
-.cert-paper::before{
-  content:"";
-  position:absolute;
-  top:14px; left:14px; right:14px; bottom:14px;
-  border:3px double currentColor;
-  border-radius:6px;
-  pointer-events:none;
-  opacity:0.85;
+/* بناء الإطارات داخل ديفات حقيقية صلبة بدلاً من Pseudo-elements لمنع التفكك */
+.cert-border-outer {
+  position: absolute;
+  top: 14px; left: 14px; right: 14px; bottom: 14px;
+  border: 3px double currentColor;
+  border-radius: 6px;
+  pointer-events: none;
+  opacity: 0.85;
+  z-index: 1;
 }
-.cert-paper::after{
-  content:"";
-  position:absolute;
-  top:22px; left:22px; right:22px; bottom:22px;
-  border:1px solid currentColor;
-  border-radius:4px;
-  pointer-events:none;
-  opacity:0.4;
+.cert-border-inner {
+  position: absolute;
+  top: 22px; left: 22px; right: 22px; bottom: 22px;
+  border: 1px solid currentColor;
+  border-radius: 4px;
+  pointer-events: none;
+  opacity: 0.4;
+  z-index: 1;
 }
 
 /* زوايا زخرفية */
@@ -368,7 +368,7 @@ html,body{
   text-align:center;
   margin-bottom:8px;
   position:relative;
-  z-index:1;
+  z-index:2;
   width:100%;
 }
 .cert-seal-wrap{
@@ -439,7 +439,7 @@ html,body{
   align-items:center;
   width:100%;
   position:relative;
-  z-index:1;
+  z-index:2;
   padding:6px 60px;
   box-sizing:border-box;
 }
@@ -509,7 +509,7 @@ html,body{
   width:100%;
   padding:0 24px;
   position:relative;
-  z-index:1;
+  z-index:2;
   gap:14px;
 }
 .cert-sig{
@@ -858,7 +858,7 @@ html,body{
 }
 
 /* ═══════════════════════════════════════════════
-   Responsive & Mobile Flex Fixes
+   Responsive
    ═══════════════════════════════════════════════ */
 @media (max-width:600px){
   .gallery{grid-template-columns:1fr 1fr; gap:10px;}
@@ -909,6 +909,10 @@ html,body{
   .cert-date-icon{font-size:0.85rem;}
   .cert-footer{padding:0 4px; gap:4px;}
 
+  /* الحفاظ على ثبات الإطارات الحقيقية على شاشات المحمول */
+  .cert-border-outer { top: 6px; left: 6px; right: 6px; bottom: 6px; }
+  .cert-border-inner { top: 10px; left: 10px; right: 10px; bottom: 10px; }
+
   .quick-fields{grid-template-columns:1fr;}
   .editor-header h2{font-size:0.85rem;}
   .btn-back{padding:6px 11px; font-size:0.7rem;}
@@ -944,9 +948,9 @@ html,body{
     aspect-ratio: 1.414 / 1 !important; 
     padding:30px 36px !important;
   }
-  .cert-reason{
-    font-size:0.95rem !important;
-  }
+  .cert-border-outer { top: 14px!important; left: 14px!important; right: 14px!important; bottom: 14px!important; }
+  .cert-border-inner { top: 22px!important; left: 22px!important; right: 22px!important; bottom: 22px!important; }
+  .cert-reason{ font-size:0.95rem !important; }
 }
 </style>
 </head>
@@ -992,6 +996,9 @@ html,body{
 
     <div class="cert-paper-wrap">
       <div class="cert-paper" id="cert-paper">
+        <div class="cert-border-outer"></div>
+        <div class="cert-border-inner"></div>
+
         <div class="cert-corner tl"><svg viewBox="0 0 50 50"><path d="M5 5 L25 5 M5 5 L5 25 M5 5 Q15 5 15 15 Q15 25 25 25 M15 15 L25 15" stroke="currentColor" stroke-width="1.5" fill="none" opacity="0.6"/></svg></div>
         <div class="cert-corner tr"><svg viewBox="0 0 50 50"><path d="M45 5 L25 5 M45 5 L45 25 M45 5 Q35 5 35 15 Q35 25 25 25 M35 15 L25 15" stroke="currentColor" stroke-width="1.5" fill="none" opacity="0.6"/></svg></div>
         <div class="cert-corner bl"><svg viewBox="0 0 50 50"><path d="M5 45 L25 45 M5 45 L5 25 M5 45 Q15 45 15 35 Q15 25 25 25 M15 35 L25 35" stroke="currentColor" stroke-width="1.5" fill="none" opacity="0.6"/></svg></div>
@@ -1210,7 +1217,7 @@ const CERTIFICATES = [
     defaultColor:'red',
     titleAr:'شهادة تقدير',
     subtitle:'CERTIFICATE OF HONOR',
-    pretext:'تتشرف إدارة المدرسة بتقديم هذه الشهادة إلى',
+    pretext:'تتقدم إدارة المدرسة بتقديم هذه الشهادة إلى',
     reason:'تقديراً لجهوده/ا المميزة وإنجازاته/ا اللافتة',
     sigRole:'قائد/ة المدرسة'
   },
@@ -1229,15 +1236,9 @@ const CERTIFICATES = [
   }
 ];
 
-/* ═══════════════════════════════════════════════
-   حالة التطبيق
-   ═══════════════════════════════════════════════ */
 let currentCert = null;
 let currentTheme = 'teal';
 
-/* ═══════════════════════════════════════════════
-   بناء المعرض
-   ═══════════════════════════════════════════════ */
 function buildGallery(){
   const grid = document.getElementById('gallery-grid');
   grid.innerHTML = '';
@@ -1268,9 +1269,6 @@ function buildGallery(){
   });
 }
 
-/* ═══════════════════════════════════════════════
-   فتح المحرّر
-   ═══════════════════════════════════════════════ */
 function openEditor(certId){
   const cert = CERTIFICATES.find(c => c.id === certId);
   if(!cert) return;
@@ -1316,9 +1314,6 @@ function backToGallery(){
   window.scrollTo(0, 0);
 }
 
-/* ═══════════════════════════════════════════════
-   تطبيق الثيم
-   ═══════════════════════════════════════════════ */
 function applyTheme(theme){
   currentTheme = theme;
   const paper = document.getElementById('cert-paper');
@@ -1335,9 +1330,6 @@ document.querySelectorAll('#themes-row .theme-pill').forEach(p => {
   p.addEventListener('click', () => applyTheme(p.dataset.theme));
 });
 
-/* ═══════════════════════════════════════════════
-   تغيير خط الاسم المكرم
-   ═══════════════════════════════════════════════ */
 function changeFont(fontName, element) {
   document.getElementById('cert-name').style.fontFamily = `'${fontName}', serif`;
   document.querySelectorAll('#fonts-row .theme-pill').forEach(btn => {
@@ -1347,9 +1339,6 @@ function changeFont(fontName, element) {
   showToast(`✅ تم الاعتماد: ${fontName}`);
 }
 
-/* ═══════════════════════════════════════════════
-   مزامنة الحقول السريعة مع الشهادة
-   ═══════════════════════════════════════════════ */
 function syncField(fieldId, certElId){
   const field = document.getElementById(fieldId);
   const certEl = document.getElementById(certElId);
@@ -1377,9 +1366,6 @@ reverseSync('cert-date', 'q-date');
 reverseSync('cert-sig-name', 'q-principal');
 reverseSync('cert-sig-name-2', 'q-seal-text');
 
-/* ═══════════════════════════════════════════════
-   النسخ المتعددة
-   ═══════════════════════════════════════════════ */
 const bulkTextarea = document.getElementById('bulk-names');
 bulkTextarea.addEventListener('input', updateBulkCount);
 function updateBulkCount(){
@@ -1387,9 +1373,6 @@ function updateBulkCount(){
   document.getElementById('bulk-count').textContent = `عدد الأسماء الحقيقية: ${names.length} شهادة جاهزة`;
 }
 
-/* ═══════════════════════════════════════════════
-   التفريغ
-   ═══════════════════════════════════════════════ */
 function resetForm(){
   if(!currentCert) return;
   document.getElementById('cert-name').textContent = '';
@@ -1405,19 +1388,6 @@ function resetForm(){
   showToast('✅ تم التفريغ بنجاح');
 }
 
-/* ═══════════════════════════════════════════════
-   Toast
-   ═══════════════════════════════════════════════ */
-function showToast(msg){
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2400);
-}
-
-/* ═══════════════════════════════════════════════
-   طباعة شهادة واحدة
-   ═══════════════════════════════════════════════ */
 function printSingle(){
   const name = document.getElementById('cert-name').textContent.trim();
   if(!name){
@@ -1427,9 +1397,6 @@ function printSingle(){
   window.print();
 }
 
-/* ═══════════════════════════════════════════════
-   تحميل شهادات متعددة باستخدام dom-to-image-more
-   ═══════════════════════════════════════════════ */
 async function downloadBulk(){
   const namesRaw = bulkTextarea.value.trim();
   let names;
@@ -1525,11 +1492,19 @@ async function downloadBulk(){
   }
 }
 
-/* 🛠️ تعديل دالة الاستخراج وقفل أبعاد الإطار الداخلي لمنع التشتت والخلع */
+/* التحديث الفاصل: فرض مقاسات وتأكيد ثبات ديفات الإطارات حركياً بداخل كود التقاط الصورة */
 async function renderToBlob(element){
-  // قفل المقاسات المعيارية الثابتة للشهادة لمنع امتداد الحاوية عشوائياً خارج الصندوق والحدود
+  // تأمين إجبار الإطارات الحقيقية على الالتزام بالمساحة المصدرة 840x594 لحل أزمة التفكك تماماً
+  const outerB = element.querySelector('.cert-border-outer');
+  const innerB = element.querySelector('.cert-border-inner');
+  
+  if(outerB && innerB) {
+    outerB.style.top = "14px"; outerB.style.left = "14px"; outerB.style.right = "14px"; outerB.style.bottom = "14px";
+    innerB.style.top = "22px"; innerB.style.left = "22px"; innerB.style.right = "22px"; innerB.style.bottom = "22px";
+  }
+
   const options = {
-    quality: 0.98,
+    quality: 1.0,
     bgcolor: '#fdfcf8',
     width: 840,   
     height: 594,  
@@ -1575,9 +1550,6 @@ function sanitize(name){
   return (name || '').replace(/[\/\\:*?"<>|]/g, '_').substring(0, 80).trim() || 'cert';
 }
 
-/* ═══════════════════════════════════════════════
-   Progress Overlay
-   ═══════════════════════════════════════════════ */
 function showProgress(title, current, total){
   document.getElementById('progress-title').textContent = title;
   updateProgress(current, total);
@@ -1589,7 +1561,6 @@ function updateProgress(current, total){
   document.getElementById('progress-text').textContent = `${current} من ${total}`;
 }
 function hideProgress(){
-  document.getElementById('progress-overlay').classList.remove('remove');
   document.getElementById('progress-overlay').classList.remove('show');
 }
 
@@ -1598,3 +1569,4 @@ buildGallery();
 
 </body>
 </html>
+
