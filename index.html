@@ -326,6 +326,7 @@ html,body{
   align-items:center;
   justify-content:space-between;
   overflow:hidden;
+  box-sizing: border-box;
 }
 
 /* الإطار الزخرفي الخارجي */
@@ -857,7 +858,7 @@ html,body{
 }
 
 /* ═══════════════════════════════════════════════
-   Responsive & Mobile Flex Fixes (تم تحديثها لحل مشكلة خروج النص)
+   Responsive & Mobile Flex Fixes
    ═══════════════════════════════════════════════ */
 @media (max-width:600px){
   .gallery{grid-template-columns:1fr 1fr; gap:10px;}
@@ -874,10 +875,9 @@ html,body{
   .page-header h1{font-size:1.2rem;}
   .page-header p{font-size:0.72rem;}
 
-  /* حل مشكلة أبعاد الجوال وخروج الكلمات خارج الإطار */
   .cert-paper{
     padding:14px 16px;
-    aspect-ratio: auto; /* ترك الحجم مرن عمودياً بدلاً من التجميد */
+    aspect-ratio: auto; 
     min-height: 250px;
   }
   .cert-body{
@@ -889,7 +889,6 @@ html,body{
   .cert-name{font-size:0.95rem; padding:2px 8px 4px; min-width: 75%; margin-bottom: 6px;}
   .cert-pretext{font-size:0.65rem; margin-bottom:3px;}
   
-  /* تصغير حجم خط نص التكريم لتجنب الاصطدام بالحواف الزخرفية السفلية */
   .cert-reason{
     font-size:0.58rem; 
     max-width:90%; 
@@ -942,7 +941,7 @@ html,body{
     box-shadow:none !important;
     margin:0 !important;
     page-break-inside:avoid;
-    aspect-ratio: 1.414 / 1 !important; /* العودة للنسب القياسية أثناء الطباعة الفعلية لـ A4 */
+    aspect-ratio: 1.414 / 1 !important; 
     padding:30px 36px !important;
   }
   .cert-reason{
@@ -1278,7 +1277,6 @@ function openEditor(certId){
   currentCert = cert;
   currentTheme = cert.defaultColor;
 
-  // تعبئة بيانات الشهادة
   document.getElementById('editor-top-title').textContent = cert.title;
   document.getElementById('cert-seal').textContent = cert.seal;
   document.getElementById('cert-title').textContent = cert.titleAr;
@@ -1290,28 +1288,23 @@ function openEditor(certId){
   document.getElementById('cert-sig-name-2').textContent = '';
   document.getElementById('cert-sig-role').textContent = cert.sigRole;
 
-  // إعادة تعيين خط الاسم إلى الافتراضي (الرقاع)
   const nameEl = document.getElementById('cert-name');
   nameEl.style.fontFamily = "'Aref Ruqaa', serif";
   document.querySelectorAll('#fonts-row .theme-pill').forEach((btn, idx) => {
     btn.classList.toggle('active', idx === 0);
   });
 
-  // مزامنة الحقول السريعة
   document.getElementById('q-name').value = '';
   document.getElementById('q-reason').value = cert.reason;
   document.getElementById('q-date').value = document.getElementById('cert-date').textContent;
   document.getElementById('q-principal').value = '';
   document.getElementById('q-seal-text').value = '';
 
-  // مسح خانة الأسماء المتعددة
   document.getElementById('bulk-names').value = '';
   updateBulkCount();
 
-  // طبق الثيم الافتراضي
   applyTheme(cert.defaultColor);
 
-  // إظهار المحرّر
   document.getElementById('gallery-view').style.display = 'none';
   document.getElementById('editor-view').classList.add('active');
   window.scrollTo(0, 0);
@@ -1473,7 +1466,6 @@ async function downloadBulk(){
   const nameEl = document.getElementById('cert-name');
   const originalName = nameEl.textContent;
 
-  // حماية التعديل وإلغاء محددات الاستجابة مؤقتاً لضمان القياس الكامل أثناء الاستخراج
   const editables = paper.querySelectorAll('[contenteditable]');
   editables.forEach(el => el.setAttribute('data-was-editable', 'true'));
   editables.forEach(el => el.removeAttribute('contenteditable'));
@@ -1533,38 +1525,31 @@ async function downloadBulk(){
   }
 }
 
-/* تعديل آلية الاستخراج لفرض المقاسات المثالية للطباعة لمنع التشوه على الجوال */
+/* 🛠️ تعديل دالة الاستخراج وقفل أبعاد الإطار الداخلي لمنع التشتت والخلع */
 async function renderToBlob(element){
-  // فرض المقاسات المعيارية الكاملة للشهادة أثناء التقاط الصورة (لتفادي اختصارات شاشة الجوال)
-  const isMobile = window.innerWidth <= 600;
-  
+  // قفل المقاسات المعيارية الثابتة للشهادة لمنع امتداد الحاوية عشوائياً خارج الصندوق والحدود
   const options = {
     quality: 0.98,
     bgcolor: '#fdfcf8',
-    width: 840,   /* الحجم الأصلي العريض */
-    height: 594,  /* الحجم المتوافق مع الفريم */
+    width: 840,   
+    height: 594,  
     style: {
       transform: 'scale(1)',
       transformOrigin: 'top left',
+      boxSizing: 'border-box',
+      width: '840px',
+      height: '594px',
+      maxWidth: '840px',
+      maxHeight: '594px',
       padding: '30px 36px',
       aspectRatio: '1.414 / 1',
       display: 'flex',
-      height: '594px'
+      flexDirection: 'column',
+      justifyContent: 'between',
+      position: 'relative'
     },
     cacheBust: true
   };
-
-  // لو كان المستخدم يراجع على الجوال، نكبر خط سبب التكريم مؤقتاً داخل الصورة ليعود لحجمه الفخم والأصلي
-  if (isMobile) {
-    options.style.fontSize = '14px';
-    const reasonEl = element.querySelector('.cert-reason');
-    if(reasonEl) {
-      options.style['.cert-reason'] = {
-        fontSize: '0.95rem',
-        lineHeight: '1.7'
-      };
-    }
-  }
 
   try{
     const blob = await domtoimage.toBlob(element, options);
@@ -1604,6 +1589,7 @@ function updateProgress(current, total){
   document.getElementById('progress-text').textContent = `${current} من ${total}`;
 }
 function hideProgress(){
+  document.getElementById('progress-overlay').classList.remove('remove');
   document.getElementById('progress-overlay').classList.remove('show');
 }
 
